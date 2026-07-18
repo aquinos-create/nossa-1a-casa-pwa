@@ -5,32 +5,52 @@
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
   >
 
   <title>Nossa 1ª Casa</title>
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#114B5F">
-<link rel="icon" href="icone-192.png">
-<link rel="apple-touch-icon" href="icone-192.png">
+
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#114B5F">
+  <link rel="icon" href="icone-192.png">
+  <link rel="apple-touch-icon" href="icone-192.png">
+
   <style>
     :root {
       --petroleo: #114B5F;
       --petroleo-escuro: #0E3D4D;
-      --petroleo-claro: #1B6B7A;
-      --fundo: #F7F8FA;
       --branco: #FFFFFF;
-      --dourado: #E8AE3A;
+      --fundo: #F7F8FA;
     }
 
     * {
       box-sizing: border-box;
     }
 
+    html,
     body {
+      width: 100%;
+      height: 100%;
       margin: 0;
-      min-height: 100vh;
+      overflow: hidden;
+      background: var(--fundo);
+      font-family: Arial, sans-serif;
+    }
+
+    .app-frame {
+      display: block;
+      width: 100%;
+      height: 100dvh;
+      border: 0;
+      background: var(--fundo);
+    }
+
+    .splash {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 24px;
@@ -40,53 +60,83 @@
         var(--petroleo-escuro)
       );
       color: var(--branco);
-      font-family: Arial, sans-serif;
       text-align: center;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
     }
 
-    .conteudo {
-      max-width: 420px;
+    .splash.oculta {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
     }
 
-    .icone {
-      font-size: 70px;
+    .splash img {
+      width: 110px;
+      height: 110px;
       margin-bottom: 18px;
+      border-radius: 24px;
     }
 
-    h1 {
+    .splash h1 {
       margin: 0;
-      font-size: 32px;
+      font-size: 30px;
     }
 
-    p {
-      margin: 10px 0 0;
+    .splash p {
+      margin: 8px 0 0;
       color: #D9E7EB;
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 600;
-    }
-
-    .status {
-      margin-top: 30px;
-      padding: 14px 18px;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.08);
-      font-size: 14px;
     }
   </style>
 </head>
 
 <body>
-  <main class="conteudo">
-    <div class="icone">🏠</div>
-
+  <div id="splash" class="splash">
+    <img src="icone-192.png" alt="Ícone Nossa 1ª Casa">
     <h1>Nossa 1ª Casa</h1>
-
     <p>Rumo à Quitação</p>
+  </div>
 
-    <div class="status">
-      Camada PWA em preparação
-    </div>
-  </main>
+  <iframe
+    id="appFrame"
+    class="app-frame"
+    src="https://script.google.com/macros/s/AKfycbzHxJFO1suy5i92f1H1b09tZ6Cja812Akov1LNzSuJbXJFz_Hc1pmtGGMgD04AJCXCtcA/exec"
+    title="Nossa 1ª Casa"
+  ></iframe>
+
+  <script>
+    const splash = document.getElementById("splash");
+    const appFrame = document.getElementById("appFrame");
+
+    let tempoMinimoConcluido = false;
+    let aplicativoCarregado = false;
+
+    function ocultarSplash() {
+      if (!tempoMinimoConcluido || !aplicativoCarregado) return;
+
+      splash.classList.add("oculta");
+
+      setTimeout(() => {
+        splash.remove();
+      }, 650);
+    }
+
+    setTimeout(() => {
+      tempoMinimoConcluido = true;
+      ocultarSplash();
+    }, 2800);
+
+    appFrame.addEventListener("load", () => {
+      aplicativoCarregado = true;
+      ocultarSplash();
+    });
+
+    setTimeout(() => {
+      if (splash) {
+        splash.classList.add("oculta");
+      }
+    }, 10000);
+  </script>
 </body>
 </html>
